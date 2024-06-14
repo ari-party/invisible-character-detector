@@ -21,10 +21,10 @@ jobs:
       - uses: oven-sh/setup-bun@v1
       - name: Install packages
         run: bun install
-      - name: Test
-        run: bun test
       - name: Build
         run: bun run build
+      - name: Test
+        run: bun test
       - name: Publish
         run: npm publish --provenance --no-git-checks --access public
         env:
