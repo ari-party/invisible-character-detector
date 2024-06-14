@@ -13,23 +13,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
+      - uses: oven-sh/setup-bun@v1
       - name: Install packages
-        run: pnpm install --no-frozen-lockfile
+        run: bun install
       - name: Test
-        run: pnpm test
+        run: bun test
       - name: Build
-        run: pnpm build
+        run: bun run build
       - name: Publish
-        run: pnpm publish --no-git-checks --access="public"
+        run: npm publish --no-git-checks --access="public"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
