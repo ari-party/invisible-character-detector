@@ -2,7 +2,9 @@ import { generateDictionary } from './dictionary' with { type: 'macro' };
 
 const dictionary = await generateDictionary();
 
-export default function hasInvisibleCharacters(text: string = ''): string[] {
+export default function hasInvisibleCharacters(rawText: string = ''): string[] {
+  const text = rawText;
+
   const detectedValues: string[] = [];
 
   for (const word of text.split(' ')) {
@@ -12,9 +14,7 @@ export default function hasInvisibleCharacters(text: string = ''): string[] {
       characterIndex += 1
     ) {
       const character = word.charAt(characterIndex);
-      const codePoint = character.codePointAt(0) as
-        | keyof typeof dictionary
-        | undefined;
+      const codePoint = character.codePointAt(0);
       if (!codePoint) continue;
 
       if (
@@ -31,8 +31,20 @@ export default function hasInvisibleCharacters(text: string = ''): string[] {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
         const nextCharacter = word.charAt(characterIndex + 1);
         const nextCodePoint = nextCharacter.codePointAt(0);
-        if (!nextCodePoint || ![6176, 6177].includes(nextCodePoint))
-          detectedValues.push(characterName); // no continue as it is the last line of the loop(s)
+        if (nextCodePoint && ![6176, 6177].includes(nextCodePoint))
+          detectedValues.push(characterName);
+      }
+
+      // U+FE0F (65039) is only allowed before a character in the U+D800 (55296) - U+DB7F (56191) block
+      else if (codePoint === 65039) {
+        const characterName = 'VARIATION SELECTOR-16';
+        const nextCharacter = word.charAt(characterIndex + 1);
+        const nextCodePoint = nextCharacter.codePointAt(0);
+        if (
+          nextCodePoint &&
+          !(nextCodePoint >= 55296 && nextCodePoint <= 56191)
+        )
+          detectedValues.push(characterName);
       }
     }
   }

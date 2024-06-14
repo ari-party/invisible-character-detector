@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import hasInvisibleCharacters from './index';
+import hasInvisibleCharacters from '../dist/index';
 
 test('SOFT HYPHEN', () => {
   expect(hasInvisibleCharacters('hello w­orld')).toStrictEqual(['SOFT HYPHEN']);
@@ -13,6 +13,16 @@ test('WORD JOINER & SOFT HYPHEN', () => {
   ]);
 });
 
+test('TAG DIGIT NINE', () => {
+  expect(hasInvisibleCharacters('h󠀹ello world')).toStrictEqual([
+    'TAG DIGIT NINE',
+  ]);
+});
+
+test('🗣️🗣️', () => {
+  expect(hasInvisibleCharacters('🗣️🗣️')).toStrictEqual([]);
+});
+
 test('NOTHING', () => {
-  expect(hasInvisibleCharacters()).toStrictEqual([]);
+  expect(hasInvisibleCharacters('hello world')).toStrictEqual([]);
 });
