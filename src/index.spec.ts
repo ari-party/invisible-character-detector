@@ -15,7 +15,8 @@ test('WORD JOINER & SOFT HYPHEN', () => {
 
 test('TAG DIGIT NINE', () => {
   expect(hasInvisibleCharacters('h󠀹ello world')).toStrictEqual([
-    'TAG DIGIT NINE',
+    '<unknown:56128>',
+    '<unknown:56377>',
   ]);
 });
 
