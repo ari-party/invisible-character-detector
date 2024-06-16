@@ -31,6 +31,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
         const nextCharacter = word.charAt(characterIndex + 1);
         const nextCodePoint = nextCharacter.codePointAt(0);
+
         if (nextCodePoint && ![6176, 6177].includes(nextCodePoint))
           detectedValues.push(characterName);
       }
@@ -40,10 +41,21 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         const characterName = 'VARIATION SELECTOR-16';
         const nextCharacter = word.charAt(characterIndex + 1);
         const nextCodePoint = nextCharacter.codePointAt(0);
+
         if (
           nextCodePoint &&
           !(nextCodePoint >= 55296 && nextCodePoint <= 56191)
         )
+          detectedValues.push(characterName);
+      }
+
+      // U+200D (8205) is only allowed before a character in the U+2600 (9728) - U+26FF (9983) block
+      else if (codePoint === 8205) {
+        const characterName = 'ZERO WIDTH JOINER';
+        const nextCharacter = word.charAt(characterIndex + 1);
+        const nextCodePoint = nextCharacter.codePointAt(0);
+
+        if (nextCodePoint && !(nextCodePoint >= 9728 && nextCodePoint <= 9983))
           detectedValues.push(characterName);
       }
     }
