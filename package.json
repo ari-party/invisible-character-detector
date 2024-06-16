@@ -10,7 +10,10 @@
   "files": [
     "dist"
   ],
-  "repository": "git+https://github.com/ari-party/invisible-character-detector.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ari-party/invisible-character-detector.git"
+  },
   "scripts": {
     "format": "prettier . -w",
     "build": "bun run scripts/build.ts"
