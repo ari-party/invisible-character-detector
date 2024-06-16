@@ -32,6 +32,10 @@ test('♟️♟️', () => {
   expect(hasInvisibleCharacters('♟️♟️')).toStrictEqual([]);
 });
 
+test('‼️‼️‼️', () => {
+  expect(hasInvisibleCharacters('‼️‼️‼️')).toStrictEqual([]);
+});
+
 test('NOTHING', () => {
   expect(hasInvisibleCharacters('hello world')).toStrictEqual([]);
 });
