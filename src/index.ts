@@ -24,10 +24,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
       ) {
         detectedValues.push(dictionary[codePoint]);
         continue;
-      }
-
-      // U+180E (6158) is only allowed before U+1820 (6176) and U+1821 (6177)
-      if (codePoint === 6158) {
+      } else if (codePoint === 6158) {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
 
         const nextCharacter = word.charAt(characterIndex + 1);
@@ -35,10 +32,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
 
         if (nextCodePoint && ![6176, 6177].includes(nextCodePoint))
           detectedValues.push(characterName);
-      }
-
-      // U+FE0F (65039) is only allowed before or after a character in the U+D800 (55296) - U+DB7F (56191) block
-      else if (codePoint === 65039) {
+      } else if (codePoint === 65039) {
         const characterName = 'VARIATION SELECTOR-16';
 
         const previousCharacter = word.charAt(characterIndex - 1);
@@ -46,21 +40,23 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         const nextCharacter = word.charAt(characterIndex + 1);
         const nextCodePoint = nextCharacter.codePointAt(0);
 
-        if (
-          previousCodePoint &&
-          previousCodePoint >= 55296 &&
-          previousCodePoint <= 56191
-        )
-          continue;
+        if (previousCodePoint) {
+          const previousInWBlock =
+            (previousCodePoint >= 9728 && previousCodePoint <= 9983) ||
+            (previousCodePoint >= 9984 && previousCodePoint <= 10175) ||
+            (previousCodePoint >= 55296 && previousCodePoint <= 56191);
 
-        if (nextCodePoint && nextCodePoint >= 55296 && nextCodePoint <= 56191)
-          continue;
+          if (previousCodePoint === 56803 || previousInWBlock) continue;
+        }
+
+        if (nextCodePoint) {
+          const nextInWBlock = nextCodePoint >= 55296 && nextCodePoint <= 56191;
+
+          if (nextInWBlock) continue;
+        }
 
         detectedValues.push(characterName);
-      }
-
-      // U+200D (8205) is only allowed before a character in the U+2600 (9728) - U+26FF (9983) block
-      else if (codePoint === 8205) {
+      } else if (codePoint === 8205) {
         const characterName = 'ZERO WIDTH JOINER';
 
         const nextCharacter = word.charAt(characterIndex + 1);
