@@ -45,7 +45,8 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
             (previousCodePoint >= 8192 && previousCodePoint <= 8303) ||
             (previousCodePoint >= 9728 && previousCodePoint <= 9983) ||
             (previousCodePoint >= 9984 && previousCodePoint <= 10175) ||
-            (previousCodePoint >= 55296 && previousCodePoint <= 56191);
+            (previousCodePoint >= 55296 && previousCodePoint <= 56191) ||
+            (previousCodePoint >= 127744 && previousCodePoint <= 128511);
 
           if (previousCodePoint === 56803 || previousInWBlock) continue;
         }
