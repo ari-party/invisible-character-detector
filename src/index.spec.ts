@@ -36,6 +36,16 @@ test('‼️‼️‼️', () => {
   expect(hasInvisibleCharacters('‼️‼️‼️')).toStrictEqual([]);
 });
 
+test('🏳️‍⚧️', () => {
+  expect(hasInvisibleCharacters('🏳️‍⚧️')).toStrictEqual([]);
+});
+
+test('VARIATION SELECTOR-16', () => {
+  expect(hasInvisibleCharacters('h️ello world')).toStrictEqual([
+    'VARIATION SELECTOR-16',
+  ]);
+});
+
 test('NOTHING', () => {
   expect(hasInvisibleCharacters('hello world')).toStrictEqual([]);
 });

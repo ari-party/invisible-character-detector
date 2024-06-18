@@ -42,20 +42,26 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         const nextCodePoint = nextCharacter.codePointAt(0);
 
         if (previousCodePoint) {
-          const previousInWBlock =
+          const previousIsInWhitelistedBlock =
             (previousCodePoint >= 8192 && previousCodePoint <= 8303) ||
             (previousCodePoint >= 9728 && previousCodePoint <= 9983) ||
             (previousCodePoint >= 9984 && previousCodePoint <= 10175) ||
             (previousCodePoint >= 55296 && previousCodePoint <= 56191) ||
             (previousCodePoint >= 127744 && previousCodePoint <= 128511);
 
-          if (previousCodePoint === 56803 || previousInWBlock) continue;
+          if (
+            previousCodePoint === 56803 ||
+            previousCodePoint === 57331 ||
+            previousIsInWhitelistedBlock
+          )
+            continue;
         }
 
         if (nextCodePoint) {
-          const nextInWBlock = nextCodePoint >= 55296 && nextCodePoint <= 56191;
+          const nextIsInWhitelistedBlock =
+            nextCodePoint >= 55296 && nextCodePoint <= 56191;
 
-          if (nextInWBlock) continue;
+          if (nextIsInWhitelistedBlock) continue;
         }
 
         detectedValues.push(characterName);
