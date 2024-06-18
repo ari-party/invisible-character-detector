@@ -23,6 +23,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         dictionary[codePoint]
       ) {
         detectedValues.push(dictionary[codePoint]);
+
         continue;
       } else if (codePoint === 6158) {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
