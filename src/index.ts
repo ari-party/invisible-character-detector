@@ -2,6 +2,14 @@ import { generateDictionary } from './dictionary' with { type: 'macro' };
 
 const dictionary = await generateDictionary();
 
+export function isSurrogates(codePoint: number): boolean {
+  return (
+    (codePoint >= 55296 && codePoint <= 56191) ||
+    (codePoint >= 56192 && codePoint <= 56319) ||
+    (codePoint >= 56320 && codePoint <= 57343)
+  );
+}
+
 export default function hasInvisibleCharacters(rawText: string = ''): string[] {
   const text = rawText;
 
@@ -17,29 +25,23 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
       const codePoint = character.codePointAt(0);
       if (!codePoint) continue;
 
-      if (
-        characterIndex !== 0 &&
-        characterIndex !== word.length - 1 &&
-        dictionary[codePoint]
-      ) {
-        detectedValues.push(dictionary[codePoint]);
+      const previousCharacter = word.charAt(characterIndex - 1);
+      const previousCodePoint = previousCharacter.codePointAt(0);
+      const nextCharacter = word.charAt(characterIndex + 1);
+      const nextCodePoint = nextCharacter.codePointAt(0);
 
-        continue;
-      } else if (codePoint === 6158) {
+      if (dictionary[codePoint]) detectedValues.push(dictionary[codePoint]);
+      //
+      else if (codePoint === 6158) {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
 
-        const nextCharacter = word.charAt(characterIndex + 1);
-        const nextCodePoint = nextCharacter.codePointAt(0);
-
-        if (nextCodePoint && ![6176, 6177].includes(nextCodePoint))
-          detectedValues.push(characterName);
-      } else if (codePoint === 65039) {
+        if (nextCodePoint)
+          if (![6176, 6177].includes(nextCodePoint))
+            detectedValues.push(characterName);
+      }
+      //
+      else if (codePoint === 65039) {
         const characterName = 'VARIATION SELECTOR-16';
-
-        const previousCharacter = word.charAt(characterIndex - 1);
-        const previousCodePoint = previousCharacter.codePointAt(0);
-        const nextCharacter = word.charAt(characterIndex + 1);
-        const nextCodePoint = nextCharacter.codePointAt(0);
 
         if (previousCodePoint) {
           const previousIsInWhitelistedBlock =
@@ -65,14 +67,19 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         }
 
         detectedValues.push(characterName);
-      } else if (codePoint === 8205) {
+      } //
+      else if (codePoint === 8205) {
         const characterName = 'ZERO WIDTH JOINER';
 
-        const nextCharacter = word.charAt(characterIndex + 1);
-        const nextCodePoint = nextCharacter.codePointAt(0);
+        if (nextCodePoint) {
+          const nextIsInWhitelistedBlock =
+            (nextCodePoint >= 9728 && nextCodePoint <= 9983) ||
+            (nextCodePoint >= 129280 && nextCodePoint <= 129535);
 
-        if (nextCodePoint && !(nextCodePoint >= 9728 && nextCodePoint <= 9983))
-          detectedValues.push(characterName);
+          if (nextIsInWhitelistedBlock || isSurrogates(nextCodePoint)) continue;
+        }
+
+        detectedValues.push(characterName);
       }
     }
   }

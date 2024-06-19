@@ -1,5 +1,7 @@
 import dts from 'bun-plugin-dts';
 
+const buildStart = performance.now();
+
 await Bun.build({
   entrypoints: ['./src/index.ts'],
   outdir: './dist',
@@ -19,3 +21,7 @@ await Bun.build({
     }),
   ],
 });
+
+console.log(
+  `Build completed in ${((performance.now() - buildStart) / 1_000).toPrecision(3)}s`,
+);

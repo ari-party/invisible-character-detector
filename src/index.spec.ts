@@ -6,6 +6,10 @@ test('SOFT HYPHEN', () => {
   expect(hasInvisibleCharacters('hello w­orld')).toStrictEqual(['SOFT HYPHEN']);
 });
 
+test('SOFT HYPHEN SUFFIX', () => {
+  expect(hasInvisibleCharacters('hello world­')).toStrictEqual(['SOFT HYPHEN']);
+});
+
 test('WORD JOINER & SOFT HYPHEN', () => {
   expect(hasInvisibleCharacters('h⁠ello w­orld')).toStrictEqual([
     'WORD JOINER',
@@ -15,8 +19,8 @@ test('WORD JOINER & SOFT HYPHEN', () => {
 
 test('TAG DIGIT NINE', () => {
   expect(hasInvisibleCharacters('h󠀹ello world')).toStrictEqual([
-    '<unknown:56128>',
-    '<unknown:56377>',
+    '<unknown-db40>',
+    '<unknown-dc39>',
   ]);
 });
 
@@ -38,6 +42,10 @@ test('‼️‼️‼️', () => {
 
 test('🏳️‍⚧️', () => {
   expect(hasInvisibleCharacters('🏳️‍⚧️')).toStrictEqual([]);
+});
+
+test('👨‍🦽', () => {
+  expect(hasInvisibleCharacters('👨‍🦽')).toStrictEqual([]);
 });
 
 test('VARIATION SELECTOR-16', () => {
