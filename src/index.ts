@@ -31,21 +31,19 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
       const nextCodePoint = nextCharacter.codePointAt(0);
 
       if (dictionary[codePoint]) detectedValues.push(dictionary[codePoint]);
-      //
       else if (codePoint === 6158) {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
 
         if (nextCodePoint)
           if (![6176, 6177].includes(nextCodePoint))
             detectedValues.push(characterName);
-      }
-      //
-      else if (codePoint === 65039) {
+      } else if (codePoint === 65039) {
         const characterName = 'VARIATION SELECTOR-16';
 
         if (previousCodePoint) {
           const previousIsInWhitelistedBlock =
             (previousCodePoint >= 8192 && previousCodePoint <= 8303) ||
+            (previousCodePoint >= 8592 && previousCodePoint <= 8703) ||
             (previousCodePoint >= 9728 && previousCodePoint <= 9983) ||
             (previousCodePoint >= 9984 && previousCodePoint <= 10175) ||
             (previousCodePoint >= 55296 && previousCodePoint <= 56191) ||
@@ -54,6 +52,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
           if (
             previousCodePoint === 56803 ||
             previousCodePoint === 57331 ||
+            isSurrogates(previousCodePoint) ||
             previousIsInWhitelistedBlock
           )
             continue;
@@ -67,17 +66,27 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         }
 
         detectedValues.push(characterName);
-      } //
-      else if (codePoint === 8205) {
+      } else if (codePoint === 8205) {
         const characterName = 'ZERO WIDTH JOINER';
+
+        if (previousCodePoint) {
+          if (isSurrogates(previousCodePoint)) continue;
+        }
 
         if (nextCodePoint) {
           const nextIsInWhitelistedBlock =
             (nextCodePoint >= 9728 && nextCodePoint <= 9983) ||
             (nextCodePoint >= 129280 && nextCodePoint <= 129535);
 
-          if (nextIsInWhitelistedBlock || isSurrogates(nextCodePoint)) continue;
+          if (isSurrogates(nextCodePoint) || nextIsInWhitelistedBlock) continue;
         }
+
+        console.log(
+          previousCodePoint?.toString(16),
+          codePoint?.toString(16),
+          nextCodePoint?.toString(16),
+          'zwj',
+        );
 
         detectedValues.push(characterName);
       }
