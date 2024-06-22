@@ -43,6 +43,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         if (previousCodePoint) {
           const previousIsInWhitelistedBlock =
             (previousCodePoint >= 8192 && previousCodePoint <= 8303) ||
+            (previousCodePoint >= 8448 && previousCodePoint <= 8527) ||
             (previousCodePoint >= 8592 && previousCodePoint <= 8703) ||
             (previousCodePoint >= 9728 && previousCodePoint <= 9983) ||
             (previousCodePoint >= 9984 && previousCodePoint <= 10175) ||
