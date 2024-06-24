@@ -51,7 +51,7 @@ export async function generateNormalDictionary() {
 
   return Object.fromEntries(
     codes.map((code) => {
-      return [code, dictionary[code]];
+      return [code, dictionary[code] ?? `<unknown-${code.toString(16)}>`];
     }),
   );
 }

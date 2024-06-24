@@ -16,7 +16,7 @@ export async function generateDictionary() {
 
   return Object.fromEntries(
     Object.keys(dictionary).map((code) => {
-      return [code, dictionary[code] ?? `<unknown-${code}>`];
+      return [code, dictionary[code]];
     }),
   );
 }

@@ -7,9 +7,11 @@ export async function generateNumberDictionary() {
 
   for (const stringCodePoint of Object.keys(dictionary)) {
     const codePoint = Number(stringCodePoint);
-    const rune = dictionary[codePoint];
+    const runename = dictionary[codePoint];
 
-    if (rune.includes('DIGIT')) numberCodePoints.push(codePoint);
+    // all runes with digit, but not tag (tag characters are invisible)
+    if (runename && runename.includes('DIGIT') && !runename.includes('TAG'))
+      numberCodePoints.push(codePoint);
   }
 
   return numberCodePoints;

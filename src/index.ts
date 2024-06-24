@@ -85,13 +85,6 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
           if (isSurrogates(nextCodePoint) || nextIsInWhitelistedBlock) continue;
         }
 
-        console.log(
-          previousCodePoint?.toString(16),
-          codePoint?.toString(16),
-          nextCodePoint?.toString(16),
-          'zwj',
-        );
-
         detectedValues.push(characterName);
       }
     }
