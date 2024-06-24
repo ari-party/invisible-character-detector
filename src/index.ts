@@ -1,6 +1,8 @@
-import { generateDictionary } from './dictionary' with { type: 'macro' };
+import { generateNormalDictionary } from './normal.dictionary' with { type: 'macro' };
+import { generateNumberDictionary } from './numbers.dictionary' with { type: 'macro' };
 
-const dictionary = await generateDictionary();
+const dictionary = await generateNormalDictionary();
+const numberDictionary = await generateNumberDictionary();
 
 export function isSurrogates(codePoint: number): boolean {
   return (
@@ -54,6 +56,7 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
             previousCodePoint === 56803 ||
             previousCodePoint === 57331 ||
             isSurrogates(previousCodePoint) ||
+            numberDictionary.includes(previousCodePoint) ||
             previousIsInWhitelistedBlock
           )
             continue;

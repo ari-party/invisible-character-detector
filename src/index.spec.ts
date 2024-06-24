@@ -24,38 +24,26 @@ test('TAG DIGIT NINE', () => {
   ]);
 });
 
-test('🗣️🗣️', () => {
-  expect(hasInvisibleCharacters('🗣️🗣️')).toStrictEqual([]);
-});
-
-test('❤️❤️', () => {
-  expect(hasInvisibleCharacters('❤️❤️')).toStrictEqual([]);
-});
-
-test('♟️♟️', () => {
-  expect(hasInvisibleCharacters('♟️♟️')).toStrictEqual([]);
-});
-
-test('‼️‼️‼️', () => {
-  expect(hasInvisibleCharacters('‼️‼️‼️')).toStrictEqual([]);
-});
-
-test('🏳️‍⚧️', () => {
-  expect(hasInvisibleCharacters('🏳️‍⚧️')).toStrictEqual([]);
-});
-
-test('👨‍🦽', () => {
-  expect(hasInvisibleCharacters('👨‍🦽')).toStrictEqual([]);
-});
-
-test('✋🏻🙂‍↕️', () => {
-  expect(hasInvisibleCharacters('✋🏻🙂‍↕️')).toStrictEqual([]);
-});
-
 test('VARIATION SELECTOR-16', () => {
   expect(hasInvisibleCharacters('h️ello world')).toStrictEqual([
     'VARIATION SELECTOR-16',
   ]);
+
+  expect(hasInvisibleCharacters('✋🏻🙂‍↕️')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('👨‍🦽')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('🏳️‍⚧️')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('‼️‼️‼️')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('♟️♟️')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('❤️❤️')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('🗣️🗣️')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('9️⃣')).toStrictEqual([]);
 });
 
 test('NOTHING', () => {
