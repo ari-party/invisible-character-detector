@@ -6,8 +6,12 @@ test('SOFT HYPHEN', () => {
   expect(hasInvisibleCharacters('hello w­orld')).toStrictEqual(['SOFT HYPHEN']);
 });
 
-test('SOFT HYPHEN SUFFIX', () => {
-  expect(hasInvisibleCharacters('hello world­')).toStrictEqual(['SOFT HYPHEN']);
+test('ZERO WIDTH JOINER', () => {
+  expect(hasInvisibleCharacters('h‍ello world')).toStrictEqual([
+    'ZERO WIDTH JOINER',
+  ]);
+
+  expect(hasInvisibleCharacters('👐🏻')).toStrictEqual([]);
 });
 
 test('WORD JOINER & SOFT HYPHEN', () => {
