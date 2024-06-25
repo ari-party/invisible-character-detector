@@ -36,20 +36,35 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
       else if (codePoint === 6158) {
         const characterName = 'MONGOLIAN VOWEL SEPARATOR';
 
+        // MVS only allowed infront of the following characters:
         if (nextCodePoint)
-          if (![6176, 6177].includes(nextCodePoint))
+          if (
+            ![
+              // Character "Mongolian Letter A"
+              6176,
+              // Character "Mongolian Letter E"
+              6177,
+            ].includes(nextCodePoint)
+          )
             detectedValues.push(characterName);
-      } else if (codePoint === 65039) {
+      }
+      //
+      else if (codePoint === 65039) {
         const characterName = 'VARIATION SELECTOR-16';
 
         if (previousCodePoint) {
           const previousIsInWhitelistedBlock =
+            // Block "General Punctation"
             (previousCodePoint >= 8192 && previousCodePoint <= 8303) ||
+            // Block "Letterlike Symbols"
             (previousCodePoint >= 8448 && previousCodePoint <= 8527) ||
+            // Block "Arrows"
             (previousCodePoint >= 8592 && previousCodePoint <= 8703) ||
+            // Block "Miscellaneous Symbols"
             (previousCodePoint >= 9728 && previousCodePoint <= 9983) ||
+            // Block "Dingbats"
             (previousCodePoint >= 9984 && previousCodePoint <= 10175) ||
-            (previousCodePoint >= 55296 && previousCodePoint <= 56191) ||
+            // Block "Miscellaneous Symbols and Pictographs"
             (previousCodePoint >= 127744 && previousCodePoint <= 128511);
 
           if (
@@ -63,14 +78,13 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
         }
 
         if (nextCodePoint) {
-          const nextIsInWhitelistedBlock =
-            nextCodePoint >= 55296 && nextCodePoint <= 56191;
-
-          if (nextIsInWhitelistedBlock) continue;
+          if (isSurrogates(nextCodePoint)) continue;
         }
 
         detectedValues.push(characterName);
-      } else if (codePoint === 8205) {
+      }
+      //
+      else if (codePoint === 8205) {
         const characterName = 'ZERO WIDTH JOINER';
 
         if (previousCodePoint) {
@@ -79,7 +93,9 @@ export default function hasInvisibleCharacters(rawText: string = ''): string[] {
 
         if (nextCodePoint) {
           const nextIsInWhitelistedBlock =
+            // Block "Miscellaneous Symbols"
             (nextCodePoint >= 9728 && nextCodePoint <= 9983) ||
+            // Block "Supplemental Symbols and Pictographs"
             (nextCodePoint >= 129280 && nextCodePoint <= 129535);
 
           if (isSurrogates(nextCodePoint) || nextIsInWhitelistedBlock) continue;
