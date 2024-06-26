@@ -19,10 +19,14 @@ export default function hasInvisibleCharacters(text: string = ''): string[] {
       const runename = characterDictionary[codePoint];
       if (!runename) continue;
 
-      const previousCharacter = word.charAt(characterIndex - 1);
-      const nextCharacter = word.charAt(characterIndex + 1);
+      const cleanWord = word
+        .split('')
+        .filter((v) => isLetter(v))
+        .join('');
+      const previousCharacter = cleanWord.charAt(characterIndex - 1);
+      const nextCharacter = cleanWord.charAt(characterIndex + 1);
 
-      if (isLetter(previousCharacter) || isLetter(nextCharacter))
+      if (isLetter(previousCharacter) && isLetter(nextCharacter))
         detectedValues.push(runename);
     }
 

@@ -3,7 +3,9 @@ import { expect, test } from 'bun:test';
 import hasInvisibleCharacters from '../dist/index';
 
 test('SOFT HYPHEN', () => {
-  expect(hasInvisibleCharacters('hello w­orld')).toStrictEqual(['SOFT HYPHEN']);
+  expect(hasInvisibleCharacters('h­ello world')).toStrictEqual(['SOFT HYPHEN']);
+
+  expect(hasInvisibleCharacters('­hello­ ­world­')).toStrictEqual([]);
 });
 
 test('ZERO WIDTH JOINER', () => {
@@ -32,6 +34,8 @@ test('VARIATION SELECTOR-16', () => {
   expect(hasInvisibleCharacters('h️ello world')).toStrictEqual([
     'VARIATION SELECTOR-16',
   ]);
+
+  expect(hasInvisibleCharacters('‼hello world‼')).toStrictEqual([]);
 
   expect(hasInvisibleCharacters('✋🏻🙂‍↕️')).toStrictEqual([]);
 
