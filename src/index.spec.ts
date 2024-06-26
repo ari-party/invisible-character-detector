@@ -52,6 +52,8 @@ test('VARIATION SELECTOR-16', () => {
   expect(hasInvisibleCharacters('🗣️🗣️')).toStrictEqual([]);
 
   expect(hasInvisibleCharacters('9️⃣')).toStrictEqual([]);
+
+  expect(hasInvisibleCharacters('☠<AAA')).toStrictEqual([]);
 });
 
 test('NOTHING', () => {

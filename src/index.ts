@@ -21,7 +21,12 @@ export default function hasInvisibleCharacters(text: string = ''): string[] {
 
       const cleanWord = word
         .split('')
-        .filter((v) => isLetter(v))
+        // remove all characters in this word that are included in the blacklisted dictionary
+        .filter((v) => {
+          const innerCodePoint = v.codePointAt(0);
+          if (!innerCodePoint) return false;
+          return !characterDictionary[innerCodePoint];
+        })
         .join('');
       const previousCharacter = cleanWord.charAt(characterIndex - 1);
       const nextCharacter = cleanWord.charAt(characterIndex + 1);
