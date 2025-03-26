@@ -31,6 +31,8 @@ test('TAG DIGIT NINE', () => {
 });
 
 test('VARIATION SELECTOR-16', () => {
+  // these are tests that have shown false positives in production
+
   expect(hasInvisibleCharacters('h️ello world')).toStrictEqual([
     'VARIATION SELECTOR-16',
   ]);
@@ -53,7 +55,7 @@ test('VARIATION SELECTOR-16', () => {
 
   expect(hasInvisibleCharacters('9️⃣')).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('☠<AAA')).toStrictEqual([]);
+  expect(hasInvisibleCharacters('🧍‍♂️AAAAAA')).toStrictEqual([]);
 });
 
 test('NOTHING', () => {
