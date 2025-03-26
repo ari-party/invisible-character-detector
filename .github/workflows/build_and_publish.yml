@@ -25,11 +25,11 @@ jobs:
       - name: Install packages
         run: bun install
 
-      - name: Build
-        run: bun run build
-
       - name: Test
         run: bun test
+
+      - name: Build
+        run: bun run build
 
       - name: Publish
         run: npm publish --provenance --no-git-checks --access public
