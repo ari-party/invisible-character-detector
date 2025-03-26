@@ -1,30 +1,38 @@
 import { expect, test } from 'bun:test';
 
-import hasInvisibleCharacters from './index.ts';
+import findInvisibleCharacters, { Detection } from './index.ts';
+
+function getRunenames(detections: Detection[]) {
+  return detections.map((detection) => detection.runename);
+}
 
 test('SOFT HYPHEN', () => {
-  expect(hasInvisibleCharacters('h­ello world')).toStrictEqual(['SOFT HYPHEN']);
+  expect(getRunenames(findInvisibleCharacters('h­ello world'))).toStrictEqual([
+    'SOFT HYPHEN',
+  ]);
 
-  expect(hasInvisibleCharacters('­hello­ ­world­')).toStrictEqual([]);
+  expect(
+    getRunenames(findInvisibleCharacters('­hello­ ­world­')),
+  ).toStrictEqual([]);
 });
 
 test('ZERO WIDTH JOINER', () => {
-  expect(hasInvisibleCharacters('h‍ello world')).toStrictEqual([
+  expect(getRunenames(findInvisibleCharacters('h‍ello world'))).toStrictEqual([
     'ZERO WIDTH JOINER',
   ]);
 
-  expect(hasInvisibleCharacters('👐🏻')).toStrictEqual([]);
+  expect(findInvisibleCharacters('👐🏻')).toStrictEqual([]);
 });
 
 test('WORD JOINER & SOFT HYPHEN', () => {
-  expect(hasInvisibleCharacters('h⁠ello w­orld')).toStrictEqual([
+  expect(getRunenames(findInvisibleCharacters('h⁠ello w­orld'))).toStrictEqual([
     'WORD JOINER',
     'SOFT HYPHEN',
   ]);
 });
 
 test('TAG DIGIT NINE', () => {
-  expect(hasInvisibleCharacters('h󠀹ello world')).toStrictEqual([
+  expect(getRunenames(findInvisibleCharacters('h󠀹ello world'))).toStrictEqual([
     '<unknown-db40>',
     '<unknown-dc39>',
   ]);
@@ -33,31 +41,35 @@ test('TAG DIGIT NINE', () => {
 test('VARIATION SELECTOR-16', () => {
   // these are tests that have shown false positives in production
 
-  expect(hasInvisibleCharacters('h️ello world')).toStrictEqual([
+  expect(getRunenames(findInvisibleCharacters('h️ello world'))).toStrictEqual([
     'VARIATION SELECTOR-16',
   ]);
 
-  expect(hasInvisibleCharacters('‼hello world‼')).toStrictEqual([]);
+  expect(
+    getRunenames(findInvisibleCharacters('‼hello world‼')),
+  ).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('✋🏻🙂‍↕️')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('✋🏻🙂‍↕️'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('👨‍🦽')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('👨‍🦽'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('🏳️‍⚧️')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('🏳️‍⚧️'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('‼️‼️‼️')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('‼️‼️‼️'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('♟️♟️')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('♟️♟️'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('❤️❤️')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('❤️❤️'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('🗣️🗣️')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('🗣️🗣️'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('9️⃣')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('9️⃣'))).toStrictEqual([]);
 
-  expect(hasInvisibleCharacters('🧍‍♂️AAAAAA')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('🧍‍♂️AAAAAA'))).toStrictEqual([]);
 });
 
 test('NOTHING', () => {
-  expect(hasInvisibleCharacters('hello world')).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('hello world'))).toStrictEqual(
+    [],
+  );
 });

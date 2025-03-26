@@ -1,6 +1,6 @@
 {
   "name": "invisible-character-detector",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "author": "Astrid <git@astrid.email>",
   "license": "MIT",
   "type": "module",
