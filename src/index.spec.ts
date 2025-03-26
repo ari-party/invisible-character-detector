@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import hasInvisibleCharacters from '../dist/index';
+import hasInvisibleCharacters from './index.ts';
 
 test('SOFT HYPHEN', () => {
   expect(hasInvisibleCharacters('h­ello world')).toStrictEqual(['SOFT HYPHEN']);
