@@ -2,9 +2,7 @@
 
 Detects invisible zero-width characters that are not the prefix or suffix of a word.
 
-Useful for filter bypass detection.
-
-Refer to the exported types as documentation.
+Useful for preventing the bypass of text filters.
 
 https://www.soscisurvey.de/tools/view-chars.php can be used to find non-printable characters in a string.
 
