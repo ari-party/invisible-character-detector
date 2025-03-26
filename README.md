@@ -2,7 +2,7 @@
 
 Detects invisible zero-width characters that are not the prefix or suffix of a word.
 
-Useful for profanity filtering/detection.
+Useful for filter bypass detection.
 
 Refer to the exported types as documentation.
 
