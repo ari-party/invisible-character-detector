@@ -65,7 +65,9 @@ test('VARIATION SELECTOR-16', () => {
 
   expect(getRunenames(findInvisibleCharacters('9️⃣'))).toStrictEqual([]);
 
-  expect(getRunenames(findInvisibleCharacters('🧍‍♂️AAAAAA'))).toStrictEqual([]);
+  expect(getRunenames(findInvisibleCharacters('🧍‍♂️A'))).toStrictEqual([]);
+
+  expect(getRunenames(findInvisibleCharacters('e🧍‍♂️A'))).toStrictEqual([]);
 });
 
 test('NOTHING', () => {
