@@ -34,8 +34,7 @@ test('WORD JOINER & SOFT HYPHEN', () => {
 
 test('TAG DIGIT NINE', () => {
   expect(getRunenames(findInvisibleCharacters('h󠀹ello world'))).toStrictEqual([
-    '<unknown-db40>',
-    '<unknown-dc39>',
+    'TAG DIGIT NINE',
   ]);
 });
 

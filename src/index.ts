@@ -12,56 +12,70 @@ export interface Detection {
   position: number;
 }
 
-export function findInvisibleCharacters(
-  str: string = '',
-  ignoreEmojis: boolean = false,
-) {
+export function findInvisibleCharacters(str: string = '') {
   const detections: Detection[] = [];
+
+  const characters: { char: string; index: number }[] = [];
+  let offset = 0;
+  for (const char of Array.from(str)) {
+    characters.push({ char, index: offset });
+    offset += char.length;
+  }
 
   for (
     let characterIndex = 0;
-    characterIndex < str.length;
+    characterIndex < characters.length;
     characterIndex += 1
   ) {
-    const character = str.charAt(characterIndex);
-    const codePoint = character.codePointAt(0)!;
-
+    const { char, index } = characters[characterIndex];
+    const codePoint = char.codePointAt(0)!;
     const runename = invisibleCharacterDictionary[codePoint];
     if (!runename) continue;
 
-    // check for letters (or emojis) on the left
-    // goal is to skip over duplicate invisible characters within a word
-    let leftContextValid = false;
+    //? skips invisible characters that are part of an emoji
+    // zero-width joiner (U+200D)
+    if (
+      codePoint === 0x200d &&
+      characterIndex > 0 &&
+      characterIndex < characters.length - 1
+    )
+      if (
+        isEmoji(characters[characterIndex - 1].char) &&
+        isEmoji(characters[characterIndex + 1].char)
+      )
+        continue;
+    // variation selector-16 (U+FE0F)
+    if (codePoint === 0xfe0f && characterIndex > 0)
+      if (isEmoji(characters[characterIndex - 1].char)) continue;
+
+    // check for letters on the left
+    let leftContextEligible = false;
     for (let i = characterIndex - 1; i >= 0; i -= 1) {
-      const precedingChar = str.charAt(i);
-
+      const precedingChar = characters[i].char;
       if (precedingChar === ' ') break;
-
-      if (isLetter(precedingChar) || (ignoreEmojis && isEmoji(precedingChar))) {
-        leftContextValid = true;
+      if (isLetter(precedingChar)) {
+        leftContextEligible = true;
         break;
       }
     }
 
     // check for letters on the right
-    let rightContextValid = false;
-    for (let i = characterIndex + 1; i < str.length; i += 1) {
-      const followingChar = str.charAt(i);
-
+    let rightContextEligible = false;
+    for (let i = characterIndex + 1; i < characters.length; i += 1) {
+      const followingChar = characters[i].char;
       if (followingChar === ' ') break;
-
       if (isLetter(followingChar)) {
-        rightContextValid = true;
+        rightContextEligible = true;
         break;
       }
     }
 
-    if (leftContextValid && rightContextValid)
+    if (leftContextEligible && rightContextEligible)
       detections.push({
         codePoint,
         runename,
-        character,
-        position: characterIndex,
+        character: char,
+        position: index,
       });
   }
 
