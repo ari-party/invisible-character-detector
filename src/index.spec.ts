@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
+import { findInvisibleCharacters } from './index.ts';
 
-import findInvisibleCharacters, { Detection } from './index.ts';
+import type { Detection } from './index.ts';
 
 function getRunenames(detections: Detection[]) {
   return detections.map((detection) => detection.runename);

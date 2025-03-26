@@ -12,7 +12,7 @@ export interface Detection {
   position: number;
 }
 
-export default function findInvisibleCharacters(
+export function findInvisibleCharacters(
   str: string = '',
   ignoreEmojis: boolean = false,
 ) {
